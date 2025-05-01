@@ -160,6 +160,7 @@ async function createAnswer(rtcPeerConnection) {
 }
 
 function setRemoteStream(event) {
+  console.log('remote stream', event)
   remoteVideoComponent.srcObject = event.streams[0]
   remoteStream = event.stream
 }
