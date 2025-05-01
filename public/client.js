@@ -8,7 +8,7 @@ const localVideoComponent = document.getElementById('local-video')
 const remoteVideoComponent = document.getElementById('remote-video')
 
 // Variables.
-const socket = io("http://localhost:3000");
+const socket = io("https://test-call-sooty.vercel.app");
 const mediaConstraints = {
   audio: true,
   video: { width: 1280, height: 720 },
