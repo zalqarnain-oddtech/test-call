@@ -20,6 +20,7 @@ let rtcPeerConnection // Connection between the local device and the remote peer
 let roomId
 
 // Free public STUN servers provided by Google.
+/*
 const iceServers = {
   iceServers: [
     { urls: 'stun:stun.l.google.com:19302' },
@@ -39,6 +40,30 @@ const iceServers = {
     }
   ],
 }
+*/
+
+const iceServers = {
+  iceServers: [
+    // Keep 1-2 STUN servers (optional if TURN always works)
+    { urls: 'stun:stun.l.google.com:19302' },
+
+    // TURN (UDP) - Primary relay
+    {
+      urls: 'turn:visitor.supportsuite247.com:3478',
+      username: 'webrtc',
+      credential: '123456'
+    },
+
+    // TURN over TLS (TCP) - Fallback for UDP-blocked networks
+    {
+      urls: 'turns:visitor.supportsuite247.com:5349',
+      username: 'webrtc',
+      credential: '123456'
+    }
+  ],
+  // Force TURN if STUN fails (critical for corporate networks)
+  iceTransportPolicy: 'relay'  // Optional: Use "all" for testing
+};
 
 // BUTTON LISTENER ============================================================
 connectButton.addEventListener('click', () => {
