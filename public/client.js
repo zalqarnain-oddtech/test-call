@@ -8,7 +8,14 @@ const localVideoComponent = document.getElementById('local-video')
 const remoteVideoComponent = document.getElementById('remote-video')
 
 // Variables.
-const socket = io("/",{transports: ['polling','websocket']});
+const socket = io({
+  transports: ['polling', 'websocket'],
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
+  randomizationFactor: 0.5
+});
 const mediaConstraints = {
   audio: true,
   video: { width: 1280, height: 720 },
