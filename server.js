@@ -4,15 +4,8 @@ const { Server } = require('socket.io')
 
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server, {
-  cors: {
-    origin: "*", // Or your specific origin
-    methods: ["GET", "POST"],
-    credentials: true
-  },
-  transports: ['polling', 'websocket'], // Explicitly set transports
-  allowEIO3: true // For compatibility
-});
+const io = new Server(server)
+
 app.use('/', express.static('public'))
 
 io.on('connection', (socket) => {

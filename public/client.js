@@ -8,14 +8,7 @@ const localVideoComponent = document.getElementById('local-video')
 const remoteVideoComponent = document.getElementById('remote-video')
 
 // Variables.
-const socket = io({
-  transports: ['polling', 'websocket'],
-  reconnection: true,
-  reconnectionAttempts: Infinity,
-  reconnectionDelay: 1000,
-  reconnectionDelayMax: 5000,
-  randomizationFactor: 0.5
-});
+const socket = io()
 const mediaConstraints = {
   audio: true,
   video: { width: 1280, height: 720 },
@@ -34,6 +27,16 @@ const iceServers = {
     { urls: 'stun:stun2.l.google.com:19302' },
     { urls: 'stun:stun3.l.google.com:19302' },
     { urls: 'stun:stun4.l.google.com:19302' },
+    {
+      urls: 'turn:visitor.supportsuite247.com:3478',
+      username: 'webrtc',
+      credential: '123456'
+    },
+    {
+      urls: 'turns:visitor.supportsuite247.com:5349',
+      username: 'webrtc',
+      credential: '123456'
+    }
   ],
 }
 
