@@ -6,8 +6,9 @@ const app = express()
 const server = http.createServer(app)
 const io = new Server(server, {
   cors: {
-    origin: "*", // Or your specific origin
-    methods: ["GET", "POST"]
+    origin: "/", // Or your specific origin
+    methods: ["GET", "POST"],
+    credentials: true
   },
   transports: ['polling', 'websocket'], // Explicitly set transports
   allowEIO3: true // For compatibility
