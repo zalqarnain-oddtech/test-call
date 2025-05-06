@@ -18,7 +18,8 @@ let remoteStream
 let isRoomCreator
 let rtcPeerConnection // Connection between the local device and the remote peer.
 let roomId
-
+let screenStream = null
+let isScreenSharing = false
 // Free public STUN servers provided by Google.
 /*
 const iceServers = {
@@ -62,7 +63,7 @@ const iceServers = {
     }
   ],
   // Force TURN if STUN fails (critical for corporate networks)
-  iceTransportPolicy: 'relay'  // Optional: Use "all" for testing
+  iceTransportPolicy: 'all'  // Optional: Use "all" for testing
 };
 
 // BUTTON LISTENER ============================================================
@@ -209,3 +210,35 @@ function sendIceCandidate(event) {
     })
   }
 }
+
+document.getElementById('share-screen-button').addEventListener('click', async () => {
+  if (!isScreenSharing) {
+    try {
+      screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true })
+
+      const screenTrack = screenStream.getVideoTracks()[0]
+
+      // Replace video track in sender
+      const sender = rtcPeerConnection.getSenders().find(s => s.track.kind === 'video')
+      sender.replaceTrack(screenTrack)
+
+      // Update local video preview
+      localVideoComponent.srcObject = screenStream
+
+      // When user stops sharing
+      screenTrack.onended = async () => {
+        const cameraStream = await navigator.mediaDevices.getUserMedia(mediaConstraints)
+        const cameraTrack = cameraStream.getVideoTracks()[0]
+
+        sender.replaceTrack(cameraTrack)
+        localStream = cameraStream
+        localVideoComponent.srcObject = localStream
+        isScreenSharing = false
+      }
+
+      isScreenSharing = true
+    } catch (err) {
+      console.error('Error sharing screen:', err)
+    }
+  }
+})
